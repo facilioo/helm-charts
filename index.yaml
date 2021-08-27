@@ -1,3 +1,14 @@
 apiVersion: v1
-entries: {}
-generated: "2021-08-27T12:08:06.922794+02:00"
+entries:
+  facilioo-backend:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-08-27T12:12:03.816771+02:00"
+    description: A Helm chart for Kubernetes
+    digest: 962f6bb0e318c16fd1719e20bf263ba4df27d6c6060efbd562c4c5da45330efa
+    name: facilioo-backend
+    type: application
+    urls:
+    - https://facilioo.github.io/helm-charts/facilioo-backend-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-08-27T12:12:03.816073+02:00"
