@@ -21,4 +21,15 @@ entries:
     urls:
     - https://facilioo.github.io/helm-charts/facilioo-backend-0.1.0.tgz
     version: 0.1.0
+  facilioo-frontend:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-08-27T10:27:49.392901318Z"
+    description: A Helm chart for Kubernetes
+    digest: 68aa14a5bd91af441ed3e755d56d8c66eaba8335995df5f6b5c7b402e5dc729f
+    name: facilioo-frontend
+    type: application
+    urls:
+    - https://github.com/facilioo/helm-charts/releases/download/facilioo-frontend-0.1.0/facilioo-frontend-0.1.0.tgz
+    version: 0.1.0
 generated: "2021-08-27T12:12:03.816073+02:00"
