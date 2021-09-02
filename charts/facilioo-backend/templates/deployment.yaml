@@ -1,61 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "facilioo-backend.fullname" . }}
-  labels:
-    {{- include "facilioo-backend.labels" . | nindent 4 }}
+  name: {{ .Release.Name}}
+  namespace: {{ .Release.Namespace }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
-      {{- include "facilioo-backend.selectorLabels" . | nindent 6 }}
+      app: {{ .Release.Name}}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
-        {{- include "facilioo-backend.selectorLabels" . | nindent 8 }}
+        app: {{ .Release.Name}}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "facilioo-backend.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+    {{if .Values.volumes }}
+      volumes:
+        - name: shared-data
+          emptyDir: {}
+    {{end}}
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: nginx
+          image: nginx
+        {{if .Values.volumes }}
+          volumeMounts:
+            - name: shared-data
+              mountPath: /usr/share/nginx/html
+        {{end}}
+        - name: api
+          image: {{ .Values.image }}
+        {{if .Values.volumes }}
+          volumeMounts:
+            - name: shared-data
+              mountPath: /pod-data
+        {{end}}
